@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title> Magic-8 Ball </title>
+<style>
+body {
+width: 90%;
+margin: auto;
+background: radial-gradient(blue 30%, lightblue 70%, white);
+}
+
+canvas#magicball {
+margin-left: 450px;
+z-index:0;
+}
+
+h1 {
+font-size: 4.0em;
+color: black;
+text-align: center;
+background-color: red;
+border: 10px dotted GoldenRod;
+margin: 40px auto 10px auto;
+width: 1200px;
+height: 100px;
+}
+
+</style>
+<script type="text/javascript" >
+
+setTimeout(drawWhtCircle, 100);
+setTimeout(text, 100);
+
+function drawBlkCircle(){
+var canvas = document.getElementById("magicball");
+canvas.addEventListener("click", drawBlkCircle, false); 
+if (canvas.getContext) {
+var circle = canvas.getContext("2d");
+circle.fillStyle= "black";
+circle.beginPath();
+circle.moveTo (400,400);
+circle.arc (400, 400, 300 ,0, Math.PI * 2, false);
+circle.closePath();
+circle.fill();
+}
+}
+
+function drawWhtCircle(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext) {
+var circle = canvas.getContext("2d");
+circle.fillStyle= "white";
+circle.beginPath();
+circle.moveTo (400,400);
+circle.arc (400, 400, 200 ,0, Math.PI * 2, false);
+circle.closePath();
+circle.fill();
+}
+}
+
+function text(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext) {
+var text = canvas.getContext("2d");
+text.fillStyle="black"
+text.font = "20.0em arial";
+text.textAlign = "center";
+text.fillText("8", 400, 505);
+}
+}
+
+function turnover(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext){
+blkCircle = canvas.getContext("2d");
+blkCircle.clearRect(0,0,600,600);
+}
+setTimeout(revealCircle, 100);
+setTimeout(drawBlueTri, 100);
+}
+
+function revealCircle(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext){
+var smlCircle = canvas.getContext("2d");
+smlCircle.fillStyle= "MidnightBlue";
+smlCircle.beginPath();
+smlCircle.moveTo(400,400);
+smlCircle.arc(400, 400, 150, 0, Math.PI * 2, false);
+smlCircle.closePath();
+smlCircle.fill();
+}
+}
+
+function drawBlueTri(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext) {
+var triangle = canvas.getContext("2d");
+triangle.fillStyle= "lightBlue";
+triangle.beginPath();
+triangle.moveTo(400,300);
+triangle.lineTo(295,450);
+triangle.lineTo(505,450);
+triangle.closePath();
+triangle.fill();
+}
+setTimeout(answerText, 100);
+}
+
+const responses = [
+"It is certain",
+"Reply hazy, try again",
+"Don’t count on it",
+"It is decidedly so",
+"Ask again later",
+"My reply is no",
+"Without a doubt",
+"Better not tell you now",
+"My sources say no",
+"Yes definitely",
+"Cannot predict now",
+"Outlook not so good",
+"You may rely on it",
+"Concentrate and ask again",
+"Very doubtful",
+"As I see it, yes",
+"Most likely",
+"Outlook good",
+"Yes",
+"Signs point to yes"]
+
+var answer = responses[Math.floor(Math.random()*responses.length)];
+
+function wrapText(ansText, answer, x, y, maxWidth, lineHeight){
+var words = answer.split(" ");
+var line = "";
+for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = ansText.measureText(testLine);
+          var testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            ansText.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+          }
+          else {
+            line = testLine;
+          }
+        }
+        ansText.fillText(line, x, y);
+      }
+	
+function answerText(){
+var canvas = document.getElementById("magicball");
+if (canvas.getContext) {
+var ansText = canvas.getContext("2d");
+var maxWidth = 160;
+var lineHeight = 15;
+var x = (canvas.width - maxWidth) / Math.PI *2;
+var y = 422;
+ansText.fillStyle="black"
+ansText.font = "1.0em arial";
+wrapText (ansText, answer, x, y, maxWidth, lineHeight);
+}
+}
+</script>
+</head>
+<body onLoad ="drawBlkCircle()">
+<h1> Ask the Magic 8 Ball a question! </h1>
+<canvas id="magicball" height="800" width="800" onClick="turnover()">
+</canvas>
+</body>
+</html>
